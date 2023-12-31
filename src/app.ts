@@ -3,6 +3,9 @@ import express from "express";
 import mongoose from "mongoose";
 import Debug from "debug";
 
+import blogsRouter from "./controllers/blogs";
+import usersRouter from "./controllers/users";
+
 const debug = Debug("app");
 
 const requiredEnvVariables = ["PORT", "MONGODB_URL"];
@@ -24,6 +27,9 @@ async function connectToDb() {
 
 const app = express();
 const port = parseInt(process.env.PORT as string, 10);
+
+app.use("/blogs", blogsRouter);
+app.use("/users", usersRouter);
 
 app.listen(port, () => {
   debug(`Listening on port ${port}`);
