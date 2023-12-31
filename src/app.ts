@@ -8,7 +8,7 @@ import usersRouter from "./controllers/users";
 
 const debug = Debug("app");
 
-const requiredEnvVariables = ["PORT", "MONGODB_URL"];
+const requiredEnvVariables = ["PORT", "MONGODB_URI"];
 for (const variable of requiredEnvVariables) {
   if (!(variable in process.env)) {
     debug(
@@ -21,7 +21,7 @@ for (const variable of requiredEnvVariables) {
 connectToDb().catch((err) => debug(err));
 async function connectToDb() {
   debug("Attempting to connect to database...");
-  await mongoose.connect(process.env.MONGODB_URL as string);
+  await mongoose.connect(process.env.MONGODB_URI as string);
   debug("Successfully connected to database!");
 }
 
