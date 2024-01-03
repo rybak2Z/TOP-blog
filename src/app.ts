@@ -28,6 +28,9 @@ async function connectToDb() {
 const app = express();
 const port = parseInt(process.env.PORT as string, 10);
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/blogs", blogsRouter);
 app.use("/users", usersRouter);
 
