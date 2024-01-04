@@ -1,23 +1,11 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import asyncHandler from "express-async-handler";
-import { body, param, validationResult } from "express-validator";
+import { body, param } from "express-validator";
 import mongoose from "mongoose";
+import { handleValidationResult } from "../utils/handleValidationResult";
 import User from "../models/user";
 
 const router = express.Router();
-
-function handleValidationResult(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
-  const result = validationResult(req);
-  if (!result.isEmpty()) {
-    res.status(400).json({ errors: result.array() });
-    return;
-  }
-  next();
-}
 
 // Get all users that are writers
 router.get(
