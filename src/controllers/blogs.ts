@@ -7,7 +7,20 @@ import Blog from "../models/blog";
 import commentsRouter from "./blogs/comments";
 
 const router = express.Router();
-router.use("/:blogId/comments", commentsRouter);
+router.use(
+  "/:blogId/comments",
+  validateBlogId(),
+  handleValidationResult,
+  commentsRouter,
+);
+
+function validateBlogId() {
+  return param("blogId")
+    .escape()
+    .trim()
+    .notEmpty()
+    .custom((blogId) => mongoose.isValidObjectId(blogId));
+}
 
 // Get all published blogs
 router.get(
@@ -57,16 +70,9 @@ router.post(
 );
 
 // Get blog
-function validateGetBlogId() {
-  return param("blogId")
-    .escape()
-    .trim()
-    .notEmpty()
-    .custom((blogId) => mongoose.isValidObjectId(blogId));
-}
 router.get(
   "/:blogId",
-  validateGetBlogId(),
+  validateBlogId(),
   handleValidationResult,
   asyncHandler(async (req, res) => {
     const blog = await Blog.findById(req.params.blogId).exec();
@@ -116,16 +122,9 @@ router.put(
 );
 
 // Delete blog
-function validateDeleteBlogId() {
-  return param("blogId")
-    .escape()
-    .trim()
-    .notEmpty()
-    .custom((blogId) => mongoose.isValidObjectId(blogId));
-}
 router.delete(
   "/:blogId",
-  validateDeleteBlogId(),
+  validateBlogId(),
   handleValidationResult,
   asyncHandler(async (req, res) => {
     const blogId = req.params.blogId;
